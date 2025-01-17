@@ -22,21 +22,23 @@ module "service_data_transfer" {
   project_id = module.project_config.project_id
 }
 
-resource "google_bigquery_dataset" "presence_portal" {
+module "bigquery_dataset_presence_portal" {
   depends_on = [
     module.service_bigquery,
     module.service_data_transfer
   ]
-  dataset_id = "presence_portal"
+  source = "./modules/bigquery_dataset_presence_portal"
+
   location   = var.region
 }
 
 resource "google_bigquery_table" "monthly_merged_top_10_search_term_impressions" {
   depends_on = [
     module.service_bigquery,
-    module.service_data_transfer
+    module.service_data_transfer,
+    module.bigquery_dataset_presence_portal
   ]
-  dataset_id = google_bigquery_dataset.presence_portal.dataset_id
+  dataset_id = module.bigquery_dataset_presence_portal.dataset_id
   table_id   = "monthly_merged_top_10_search_term_impressions"
   clustering = ["EntityID"]
   # TODO remove once we are done so things are protected again
@@ -84,9 +86,10 @@ resource "google_bigquery_table" "monthly_merged_top_10_search_term_impressions"
 resource "google_bigquery_table" "monthly_merged_impressions_stats" {
   depends_on = [
     module.service_bigquery,
-    module.service_data_transfer
+    module.service_data_transfer,
+    module.bigquery_dataset_presence_portal
   ]
-  dataset_id = google_bigquery_dataset.presence_portal.dataset_id
+  dataset_id = module.bigquery_dataset_presence_portal.dataset_id
   table_id   = "monthly_merged_impressions_stats"
   clustering = ["EntityID"]
   # TODO remove once we are done so things are protected again
@@ -149,9 +152,10 @@ resource "google_bigquery_table" "monthly_merged_impressions_stats" {
 resource "google_bigquery_table" "monthly_merged_customer_actions" {
   depends_on = [
     module.service_bigquery,
-    module.service_data_transfer
+    module.service_data_transfer,
+    module.bigquery_dataset_presence_portal
   ]
-  dataset_id = google_bigquery_dataset.presence_portal.dataset_id
+  dataset_id = module.bigquery_dataset_presence_portal.dataset_id
   table_id   = "monthly_merged_customer_actions"
   clustering = ["EntityID"]
   # TODO remove once we are done so things are protected again

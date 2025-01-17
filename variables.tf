@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "The region for the BigQuery dataset"
+  description = "The region of the GCP project"
   type        = string
   default     = "EU"
 }
