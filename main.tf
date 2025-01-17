@@ -16,18 +16,16 @@ module "service_bigquery" {
   project_id = module.project_config.project_id
 }
 
-resource "google_project_service" "data_transfer" {
-  project = module.project_config.project_id
-  service = "bigquerydatatransfer.googleapis.com"
-  # TODO remove once we are done so things are protected again
-  disable_on_destroy         = true
-  disable_dependent_services = true
+module "service_data_transfer" {
+  source = "./modules/service_data_transfer"
+
+  project_id = module.project_config.project_id
 }
 
 resource "google_bigquery_dataset" "presence_portal" {
   depends_on = [
     module.service_bigquery,
-    google_project_service.data_transfer
+    module.service_data_transfer
   ]
   dataset_id = "presence_portal"
   location   = var.region
@@ -36,7 +34,7 @@ resource "google_bigquery_dataset" "presence_portal" {
 resource "google_bigquery_table" "monthly_merged_top_10_search_term_impressions" {
   depends_on = [
     module.service_bigquery,
-    google_project_service.data_transfer
+    module.service_data_transfer
   ]
   dataset_id = google_bigquery_dataset.presence_portal.dataset_id
   table_id   = "monthly_merged_top_10_search_term_impressions"
@@ -86,7 +84,7 @@ resource "google_bigquery_table" "monthly_merged_top_10_search_term_impressions"
 resource "google_bigquery_table" "monthly_merged_impressions_stats" {
   depends_on = [
     module.service_bigquery,
-    google_project_service.data_transfer
+    module.service_data_transfer
   ]
   dataset_id = google_bigquery_dataset.presence_portal.dataset_id
   table_id   = "monthly_merged_impressions_stats"
@@ -151,7 +149,7 @@ resource "google_bigquery_table" "monthly_merged_impressions_stats" {
 resource "google_bigquery_table" "monthly_merged_customer_actions" {
   depends_on = [
     module.service_bigquery,
-    google_project_service.data_transfer
+    module.service_data_transfer
   ]
   dataset_id = google_bigquery_dataset.presence_portal.dataset_id
   table_id   = "monthly_merged_customer_actions"
