@@ -10,42 +10,21 @@ module "project_config" {
   billing_account = var.billing_account
 }
 
-module "service_bigquery" {
-  source = "./modules/service_bigquery"
-
-  project_id = module.project_config.project_id
+resource "google_project_service" "bigquery" {
+  project = var.project_id
+  service = "bigquery.googleapis.com"
 }
 
-module "service_data_transfer" {
-  source = "./modules/service_data_transfer"
-
-  project_id = module.project_config.project_id
+resource "google_project_service" "data_transfer" {
+  project = var.project_id
+  service = "bigquerydatatransfer.googleapis.com"
 }
 
-module "bigquery_dataset" {
-  depends_on = [
-    module.service_bigquery
-  ]
-  source = "./modules/bigquery/dataset"
+module "bigquery" {
+  depends_on = [google_project_service.bigquery, google_project_service.data_transfer]
+  source     = "./modules/bigquery"
 
-  location = var.region
-}
-
-module "tables" {
-  depends_on = [
-    module.bigquery_dataset
-  ]
-  source = "./modules/bigquery/tables"
-
-  dataset_id = module.bigquery_dataset.dataset_id
-}
-
-module "data_transfer" {
-  depends_on = [
-    module.bigquery_dataset
-  ]
-  source = "./modules/bigquery/data_transfer"
-
+  project_id             = module.project_config.project_id
   location               = var.region
   data_transfer_start    = var.data_transfer_start
   data_transfer_schedule = var.data_transfer_schedule

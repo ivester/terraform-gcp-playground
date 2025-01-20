@@ -1,5 +1,5 @@
 -- merge tableA into tableB
-MERGE `terraform_test_ives_7.presence_portal.monthly_merged_top_10_search_term_impressions` B USING (
+MERGE `terraform-test-ives-8.presence_portal.monthly_merged_top_10_search_term_impressions` B USING (
   SELECT
     EntityID,
     Month,

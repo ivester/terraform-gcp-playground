@@ -1,8 +1,7 @@
 resource "google_bigquery_table" "monthly_merged_top_10_search_term_impressions" {
-  dataset_id          = var.dataset_id
-  table_id            = "monthly_merged_top_10_search_term_impressions"
-  clustering          = ["EntityID"]
-  deletion_protection = false
+  dataset_id = var.dataset_id
+  table_id   = "monthly_merged_top_10_search_term_impressions"
+  clustering = ["EntityID"]
 
   time_partitioning {
     type  = "DAY"
