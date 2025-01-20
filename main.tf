@@ -22,30 +22,29 @@ module "service_data_transfer" {
   project_id = module.project_config.project_id
 }
 
-module "bigquery_dataset_presence_portal" {
+module "bigquery_dataset" {
   depends_on = [
-    module.service_bigquery,
-    module.service_data_transfer
+    module.service_bigquery
   ]
-  source = "./modules/bigquery_dataset_presence_portal"
+  source = "./modules/bigquery/dataset"
 
   location = var.region
 }
 
-module "bigquery_tables" {
+module "tables" {
   depends_on = [
-    module.bigquery_dataset_presence_portal
+    module.bigquery_dataset
   ]
-  source = "./modules/bigquery_tables"
+  source = "./modules/bigquery/tables"
 
-  dataset_id = module.bigquery_dataset_presence_portal.dataset_id
+  dataset_id = module.bigquery_dataset.dataset_id
 }
 
-module "bigquery_data_transfer" {
+module "data_transfer" {
   depends_on = [
-    module.bigquery_tables
+    module.bigquery_dataset
   ]
-  source = "./modules/bigquery_data_transfer"
+  source = "./modules/bigquery/data_transfer"
 
   location               = var.region
   data_transfer_start    = var.data_transfer_start
