@@ -7,6 +7,6 @@ resource "google_bigquery_data_transfer_config" "sync_interactions" {
     start_time = var.data_transfer_start
   }
   params = {
-    query = file("./modules/bigquery/data_transfer/sync-interactions.sql")
+    query = file("./modules/bigquery/data-transfer/sync-interactions.sql")
   }
 }

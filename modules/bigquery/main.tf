@@ -33,7 +33,7 @@ module "data_transfer" {
     google_project_service.data_transfer,
     module.tables
   ]
-  source = "./data_transfer"
+  source = "./data-transfer"
 
   location               = var.location
   data_transfer_start    = "2025-01-22T16:04:00Z"

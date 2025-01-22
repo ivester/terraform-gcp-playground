@@ -4,7 +4,7 @@ provider "google" {
 }
 
 module "project_config" {
-  source = "./modules/project_config"
+  source = "./modules/project-config"
 
   project_id      = var.project_id
   billing_account = var.billing_account
