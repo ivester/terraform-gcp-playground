@@ -7,6 +7,6 @@ resource "google_bigquery_data_transfer_config" "sync_top_10_terms" {
     start_time = var.data_transfer_start
   }
   params = {
-    query = file("./modules/bigquery/data-transfer/sync-top-10-terms.sql")
+    query = templatefile("${path.module}/sync-top-10-terms.tpl", { project_id = var.project_id, project_id_source = var.project_id_source, dataset_id = var.dataset_id })
   }
 }

@@ -7,6 +7,6 @@ resource "google_bigquery_data_transfer_config" "sync_impressions" {
     start_time = var.data_transfer_start
   }
   params = {
-    query = file("./modules/bigquery/data-transfer/sync-impressions.sql")
+    query = templatefile("${path.module}/sync-impressions.tpl", { project_id = var.project_id, project_id_source = var.project_id_source, dataset_id = var.dataset_id })
   }
 }

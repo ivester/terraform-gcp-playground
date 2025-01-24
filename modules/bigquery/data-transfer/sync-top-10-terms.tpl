@@ -1,5 +1,5 @@
 -- merge tableA into tableB
-MERGE `terraform-test-ives-9.presence_portal.monthly_merged_top_10_search_term_impressions` B USING (
+MERGE `${project_id}.${dataset_id}.monthly_merged_top_10_search_term_impressions` B USING (
   SELECT
     EntityID,
     Month,
@@ -8,7 +8,7 @@ MERGE `terraform-test-ives-9.presence_portal.monthly_merged_top_10_search_term_i
     AboveMaxDate,
     hasChanges
   FROM
-    `terraform-test-ives.presence_portal.monthly_merged_top_10_search_term_impressions`
+    `${project_id_source}.${dataset_id}.monthly_merged_top_10_search_term_impressions`
 ) A ON B.EntityID = A.EntityID
 WHEN MATCHED
 AND A.hasChanges = TRUE THEN
@@ -41,7 +41,7 @@ VALUES
 
 -- Set hasChanges to false in TableA
 UPDATE
-  `terraform-test-ives.presence_portal.monthly_merged_top_10_search_term_impressions`
+  `${project_id_source}.${dataset_id}.monthly_merged_top_10_search_term_impressions`
 SET
   hasChanges = FALSE
 WHERE

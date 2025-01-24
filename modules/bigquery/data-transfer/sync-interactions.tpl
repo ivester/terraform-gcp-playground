@@ -1,17 +1,14 @@
 -- merge tableA into tableB
-MERGE `terraform-test-ives-9.presence_portal.monthly_merged_impressions_stats` B USING (
+MERGE `${project_id}.${dataset_id}.monthly_merged_customer_actions` B USING (
   SELECT
     EntityID,
     Month,
     Total,
-    Branded,
-    Unbranded,
-    Unspecified,
-    FacebookPaidImpressions,
+    Category,
     AboveMaxDate,
     hasChanges
   FROM
-    `terraform-test-ives.presence_portal.monthly_merged_impressions_stats`
+    `${project_id_source}.${dataset_id}.monthly_merged_customer_actions`
 ) A ON B.EntityID = A.EntityID
 WHEN MATCHED
 AND A.hasChanges = TRUE THEN
@@ -19,9 +16,7 @@ UPDATE
 SET
   B.Month = A.Month,
   B.Total = A.Total,
-  B.Branded = A.Branded,
-  B.Unbranded = A.Unbranded,
-  B.Unspecified = A.Unspecified,
+  B.Category = A.Category,
   B.AboveMaxDate = A.AboveMaxDate,
   B.hasChanges = FALSE
   WHEN NOT MATCHED THEN
@@ -30,9 +25,7 @@ INSERT
     EntityID,
     Month,
     Total,
-    Branded,
-    Unbranded,
-    Unspecified,
+    Category,
     AboveMaxDate,
     hasChanges
   )
@@ -41,16 +34,14 @@ VALUES
     A.EntityID,
     A.Month,
     A.Total,
-    A.Branded,
-    A.Unbranded,
-    A.Unspecified,
+    A.Category,
     A.AboveMaxDate,
     FALSE
   );
 
 -- Set hasChanges to false in TableA
 UPDATE
-  `terraform-test-ives.presence_portal.monthly_merged_impressions_stats`
+  `${project_id_source}.${dataset_id}.monthly_merged_customer_actions`
 SET
   hasChanges = FALSE
 WHERE

@@ -13,6 +13,8 @@ module "project_config" {
 module "bigquery" {
   source = "./modules/bigquery"
 
-  project_id             = module.project_config.project_id
-  location               = var.region
+  project_id        = module.project_config.project_id
+  project_id_source = "terraform-test-ives"
+  location          = var.region
+  dataset_id        = "presence_portal"
 }

@@ -12,7 +12,7 @@ resource "google_project_service" "data_transfer" {
 ## Create BigQuery Dataset
 resource "google_bigquery_dataset" "presence_portal" {
   depends_on = [google_project_service.bigquery]
-  dataset_id = "presence_portal"
+  dataset_id = var.dataset_id
   location   = var.location
 }
 
@@ -35,7 +35,10 @@ module "data_transfer" {
   ]
   source = "./data-transfer"
 
+  project_id             = var.project_id
+  project_id_source      = var.project_id_source
   location               = var.location
+  dataset_id             = google_bigquery_dataset.presence_portal.dataset_id
   data_transfer_start    = "2025-01-22T16:04:00Z"
   data_transfer_schedule = "every 24 hours"
 }
