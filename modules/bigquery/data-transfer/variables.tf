@@ -23,7 +23,13 @@ variable "data_transfer_schedule" {
   type        = string
 }
 
-variable "dataset_id" {
-  description = "The id of the BigQuery dataset"
-  type        = string
+variable "config" {
+  description = "List of configurations for data transfer"
+  type = object({
+    dataset_id = string
+    data_transfer = list(object({
+      name     = string
+      template = string
+    }))
+  })
 }

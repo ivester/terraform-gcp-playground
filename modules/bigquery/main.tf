@@ -4,11 +4,6 @@ resource "google_project_service" "bigquery" {
   service = "bigquery.googleapis.com"
 }
 
-resource "google_project_service" "data_transfer" {
-  project = var.project_id
-  service = "bigquerydatatransfer.googleapis.com"
-}
-
 ## Create BigQuery Dataset
 resource "google_bigquery_dataset" "presence_portal" {
   depends_on = [google_project_service.bigquery]
@@ -16,6 +11,7 @@ resource "google_bigquery_dataset" "presence_portal" {
   location   = var.location
 }
 
+# TODO move into separate module - like data-transfer - just import module here (data-tranfer is imported in root because we might not always need a data_tranfer but we always need a dataset and tables)
 ## Create BigQuery Tables
 module "tables" {
   depends_on = [
@@ -24,21 +20,4 @@ module "tables" {
   source = "./tables"
 
   dataset_id = google_bigquery_dataset.presence_portal.dataset_id
-}
-
-## Create Data Transfer
-module "data_transfer" {
-  depends_on = [
-    google_bigquery_dataset.presence_portal,
-    google_project_service.data_transfer,
-    module.tables
-  ]
-  source = "./data-transfer"
-
-  project_id             = var.project_id
-  project_id_source      = var.project_id_source
-  location               = var.location
-  dataset_id             = google_bigquery_dataset.presence_portal.dataset_id
-  data_transfer_start    = "2025-01-22T16:04:00Z"
-  data_transfer_schedule = "every 24 hours"
 }
