@@ -35,7 +35,7 @@ locals {
       template = "${path.module}/sync-${local.table_names.top_10_terms}.tpl"
     },
   ]
-  data_transfer_start    = "2026-01-24T14:05:00Z"
+  data_transfer_start    = "2025-01-27T15:56:00Z"
   data_transfer_schedule = "every 24 hours"
 }
 
