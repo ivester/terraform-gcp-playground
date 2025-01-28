@@ -71,5 +71,4 @@ WHERE
       AND B.Unbranded = A.Unbranded
       AND B.Unspecified = A.Unspecified
       AND B.AboveMaxDate = A.AboveMaxDate
-      AND
   );
