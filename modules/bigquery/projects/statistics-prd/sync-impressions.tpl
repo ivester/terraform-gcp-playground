@@ -12,6 +12,8 @@ MERGE `${project_id}.${dataset_id}.monthly_merged_impressions_stats` B USING (
     hasChanges
   FROM
     `${project_id_source}.${dataset_id}.monthly_merged_impressions_stats`
+  WHERE
+    Month >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
 ) A ON B.EntityID = A.EntityID
 WHEN MATCHED
 AND A.hasChanges = TRUE THEN
@@ -48,10 +50,26 @@ VALUES
     FALSE
   );
 
--- Set hasChanges to false in TableA
+-- Set hasChanges to false in TableA only if the entry exists in TableB
 UPDATE
-  `${project_id_source}.${dataset_id}.monthly_merged_impressions_stats`
+  `${project_id_source}.${dataset_id}.monthly_merged_impressions_stats` A
 SET
   hasChanges = FALSE
 WHERE
-  hasChanges = TRUE;
+  hasChanges = TRUE
+  AND Month >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
+  AND EXISTS (
+    SELECT
+      1
+    FROM
+      `${project_id}.${dataset_id}.monthly_merged_impressions_stats` B
+    WHERE
+      B.EntityID = A.EntityID
+      AND B.Month = A.Month
+      AND B.Total = A.Total
+      AND B.Branded = A.Branded
+      AND B.Unbranded = A.Unbranded
+      AND B.Unspecified = A.Unspecified
+      AND B.AboveMaxDate = A.AboveMaxDate
+      AND
+  );
