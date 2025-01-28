@@ -11,24 +11,24 @@ module "project_config" {
   billing_account = var.billing_account
 }
 
-module "statistics" {
-  source = "./modules/bigquery/projects/statistics"
+module "statistics_prd" {
+  source = "./modules/bigquery/projects/statistics-prd"
 }
 
-module "bigquery_statistics" {
+module "bigquery_statistics_prd" {
   source = "./modules/bigquery"
 
   project_id = var.project_id
   location   = var.region
-  config     = module.statistics.config
+  config     = module.statistics_prd.config
 }
 
 ## Create Bigquery Data Transfer - Statistics
-module "data_transfer_statistics" {
-  depends_on = [module.bigquery_statistics]
+module "data_transfer_statistics_prd" {
+  depends_on = [module.bigquery_statistics_prd]
   source     = "./modules/bigquery/data-transfer"
 
   project_id = var.project_id
   location   = var.region
-  config     = module.statistics.config
+  config     = module.statistics_prd.config
 }
