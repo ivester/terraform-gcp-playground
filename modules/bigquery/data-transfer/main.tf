@@ -20,6 +20,8 @@ resource "google_bigquery_data_transfer_config" "data_transfer" {
         project_id        = var.project_id,
         project_id_source = var.config.project_id_source,
         dataset_id        = var.config.dataset_id,
+        table_id          = each.value.name,
+        columns           = "EntityID, Month, Total, RawSearchTerm, AboveMaxDate, hasChanges"
     })
   }
 }

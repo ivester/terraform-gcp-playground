@@ -1,5 +1,5 @@
 -- merge tableA into tableB
-MERGE `${project_id}.${dataset_id}.monthly_merged_impressions_stats` B USING (
+MERGE `${project_id}.${dataset_id}.${table_id}` B USING (
   SELECT
     EntityID,
     Month,
@@ -11,7 +11,7 @@ MERGE `${project_id}.${dataset_id}.monthly_merged_impressions_stats` B USING (
     AboveMaxDate,
     hasChanges
   FROM
-    `${project_id_source}.${dataset_id}.monthly_merged_impressions_stats`
+    `${project_id_source}.${dataset_id}.${table_id}`
   WHERE
     Month >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH)
 ) A ON B.EntityID = A.EntityID
@@ -28,16 +28,7 @@ SET
   B.hasChanges = FALSE
   WHEN NOT MATCHED THEN
 INSERT
-  (
-    EntityID,
-    Month,
-    Total,
-    Branded,
-    Unbranded,
-    Unspecified,
-    AboveMaxDate,
-    hasChanges
-  )
+  (${columns})
 VALUES
   (
     A.EntityID,
@@ -52,7 +43,7 @@ VALUES
 
 -- Set hasChanges to false in TableA only if the entry exists in TableB
 UPDATE
-  `${project_id_source}.${dataset_id}.monthly_merged_impressions_stats` A
+  `${project_id_source}.${dataset_id}.${table_id}` A
 SET
   hasChanges = FALSE
 WHERE
@@ -62,7 +53,7 @@ WHERE
     SELECT
       1
     FROM
-      `${project_id}.${dataset_id}.monthly_merged_impressions_stats` B
+      `${project_id}.${dataset_id}.${table_id}` B
     WHERE
       B.EntityID = A.EntityID
       AND B.Month = A.Month
