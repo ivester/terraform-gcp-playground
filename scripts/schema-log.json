@@ -1,0 +1,22 @@
+[
+  {
+    "name": "ID",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "DataTeamLogId",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "ExecutionDate",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "IsSuccess",
+    "type": "BOOLEAN",
+    "mode": "NULLABLE"
+  }
+]

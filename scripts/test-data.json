@@ -1,0 +1,2 @@
+{"EntityID": "123", "Month": "2025-01-01", "Total": 100, "Branded": 50, "Unbranded": 30, "Unspecified": 20, "FacebookPaidImpressions": 10, "hasChanges": false, "AboveMaxDate": 1}
+{"EntityID": "456", "Month": "2025-01-01", "Total": 200, "Branded": 100, "Unbranded": 60, "Unspecified": 40, "FacebookPaidImpressions": 20, "hasChanges": false, "AboveMaxDate": 0}
