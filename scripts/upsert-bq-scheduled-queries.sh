@@ -37,6 +37,6 @@ for i in "${!TABLE_IDS[@]}"; do
     --display_name="$TABLE_ID" \
     --params="{\"query\":$ESCAPED_QUERY}" \
     --schedule="$DATA_TRANSFER_SCHEDULE" \
-    --start_time="$DATA_TRANSFER_START" \
+    --schedule_start_time="$DATA_TRANSFER_START" \
     --location="$LOCATION"
 done
